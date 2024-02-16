@@ -15,4 +15,8 @@ const ViewerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  width: 50%;
+  margin: 0 auto;
 `;

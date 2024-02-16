@@ -5,6 +5,8 @@ export type Card = {
   author: string;
 };
 export const Card = ({ title, author }: Card) => {
+  const red = '#ff6e6e';
+  const green = '#64eb5f';
   return (
     <CardWrapper>
       <TitleCard>
@@ -14,6 +16,10 @@ export const Card = ({ title, author }: Card) => {
       <AuthorCard>
         <h2>{author}</h2>
       </AuthorCard>
+      <ButtonWrapper>
+        <Button backgroundColor={red}>Pass</Button>
+        <Button backgroundColor={green}>Done</Button>
+      </ButtonWrapper>
     </CardWrapper>
   );
 };
@@ -58,4 +64,25 @@ const AuthorCard = styled.div`
     margin: 0;
     font-size: 2rem;
   }
+`;
+
+const ButtonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 5%;
+
+  width: 100%;
+  margin-top: 1rem;
+`;
+
+const Button = styled.button<{ backgroundColor: string }>`
+  display: block;
+  border-radius: 10px;
+  width: 100%;
+  height: 40px;
+
+  background-color: ${(props) => props.backgroundColor || 'grey'};
+  color: white;
+
+  border-style: none;
 `;

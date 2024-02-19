@@ -17,8 +17,8 @@ export const Card = ({ title, author }: Card) => {
         <h2>{author}</h2>
       </AuthorCard>
       <ButtonWrapper>
-        <Button backgroundColor={red}>Pass</Button>
-        <Button backgroundColor={green}>Done</Button>
+        <Button bgcolor={red}>Pass</Button>
+        <Button bgcolor={green}>Done</Button>
       </ButtonWrapper>
     </CardWrapper>
   );
@@ -33,7 +33,7 @@ const CardWrapper = styled.div`
   margin: 0 auto;
   padding: 1rem;
 
-  background-color: #cbcbcb;
+  background-color: #434343;
 
   border-radius: 10px;
 `;
@@ -45,7 +45,7 @@ const TitleCard = styled.div`
   width: calc(100% - 2rem);
   aspect-ratio: 1 / 1;
 
-  background-color: white;
+  background-color: #202020;
   border-radius: 10px;
 
   margin: 0;
@@ -75,14 +75,16 @@ const ButtonWrapper = styled.div`
   margin-top: 1rem;
 `;
 
-const Button = styled.button<{ backgroundColor: string }>`
+const Button = styled.button<{ bgcolor: string }>`
   display: block;
   border-radius: 10px;
   width: 100%;
   height: 40px;
 
-  background-color: ${(props) => props.backgroundColor || 'grey'};
-  color: white;
+  background-color: ${(props) => props.bgcolor || 'grey'};
+  color: #202020;
+
+  font-size: 1rem;
 
   border-style: none;
 `;

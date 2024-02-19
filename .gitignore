@@ -1,4 +1,4 @@
-**/.env.js
+src/utils/env.*
 
 # Logs
 logs

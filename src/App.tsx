@@ -3,6 +3,8 @@ import Fetcher from './components/Fetcher';
 import Keywords from './components/Keywords';
 import Viewer from './components/Viewer';
 
+import { Provider as MyProvider } from 'react-redux';
+
 function App() {
   return (
     <>

@@ -21,7 +21,7 @@ export default function Keywords() {
         <FirstTime>
           <h1>첫번째 키워드들</h1>
           <div>
-            {keywords?.key_1.map(({ keyword }, i) => {
+            {keywords?.primary.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>
@@ -29,13 +29,7 @@ export default function Keywords() {
         <MainTime>
           <h1>메인 키워드들</h1>
           <div>
-            {keywords?.key_2.map(({ keyword }, i) => {
-              return <KeywordBox key={i}>{keyword}</KeywordBox>;
-            })}
-            {keywords?.key_3.map(({ keyword }, i) => {
-              return <KeywordBox key={i}>{keyword}</KeywordBox>;
-            })}
-            {keywords?.key_4.map(({ keyword }, i) => {
+            {keywords?.others.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>

@@ -1,8 +1,5 @@
-import { Client } from '@notionhq/client';
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PAGE_ID, NOTION_API_KEY } from './env';
-
-const notion = new Client({ auth: NOTION_API_KEY });
 
 type BlockProperties = Record<
   | '키워드1(시작 전 발표)'
@@ -29,15 +26,25 @@ export type KeywordsType = Record<
 >;
 
 export const fetchKeywords = async () => {
-  const response = await notion.databases.query({
-    database_id: PAGE_ID,
+  const queryFilter = {
     filter: {
       property: '이름',
       title: {
         is_not_empty: true,
       },
     },
-  });
+  };
+
+  const response = await fetch(`api/v1/databases/${PAGE_ID}/query`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Notion-Version': '2022-06-28',
+      Authorization: `Bearer ${NOTION_API_KEY}`,
+    },
+    body: JSON.stringify(queryFilter),
+  }).then((res) => res.json());
+
   const results = response.results as PageObjectResponse[];
 
   const tempInit: KeywordsType = {

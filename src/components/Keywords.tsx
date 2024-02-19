@@ -13,7 +13,6 @@ export default function Keywords() {
 
   useEffect(() => {
     doFetchAndSet();
-    console.log(keywords);
   }, []);
 
   return (
@@ -21,9 +20,25 @@ export default function Keywords() {
       <KeywordsWrapper>
         <FirstTime>
           <h1>첫번째 키워드들</h1>
+          <div>
+            {keywords?.key_1.map(({ keyword }, i) => {
+              return <KeywordBox key={i}>{keyword}</KeywordBox>;
+            })}
+          </div>
         </FirstTime>
         <MainTime>
           <h1>메인 키워드들</h1>
+          <div>
+            {keywords?.key_2.map(({ keyword }, i) => {
+              return <KeywordBox key={i}>{keyword}</KeywordBox>;
+            })}
+            {keywords?.key_3.map(({ keyword }, i) => {
+              return <KeywordBox key={i}>{keyword}</KeywordBox>;
+            })}
+            {keywords?.key_4.map(({ keyword }, i) => {
+              return <KeywordBox key={i}>{keyword}</KeywordBox>;
+            })}
+          </div>
         </MainTime>
         <FetchButtonWrapper></FetchButtonWrapper>
       </KeywordsWrapper>
@@ -47,3 +62,16 @@ const KeywordsWrapper = styled.section`
 const FirstTime = styled.div``;
 const MainTime = styled.div``;
 const FetchButtonWrapper = styled.div``;
+const KeywordBox = styled.div`
+  padding: 1rem;
+  margin: 0.5rem;
+  display: inline-block;
+
+  background-color: white;
+  color: black;
+
+  border-radius: 500px;
+
+  min-width: 100px;
+  text-align: center;
+`;

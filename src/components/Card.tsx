@@ -52,7 +52,7 @@ const TitleCard = styled.div`
   padding: 1rem;
 
   & > h1 {
-    font-size: 6rem;
+    font-size: 500%;
     margin: 0;
   }
 `;
@@ -62,7 +62,7 @@ const AuthorCard = styled.div`
 
   & > h2 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 200%;
   }
 `;
 
@@ -84,7 +84,7 @@ const Button = styled.button<{ bgcolor: string }>`
   background-color: ${(props) => props.bgcolor || 'grey'};
   color: white;
 
-  font-size: 1.5rem;
+  font-size: 150%;
   font-weight: bold;
 
   border-style: none;

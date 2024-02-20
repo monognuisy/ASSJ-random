@@ -8,6 +8,7 @@ import { AppState } from '../stores/state';
 
 export default function Viewer() {
   const [topic, setTopic] = useState<PartialKeyword>();
+  const [keywordArray, setKeywordArray] = useState<PartialKeyword[]>([]);
   const { primary, others } = useSelector<RootState, AppState>(
     (state) => state.keyworder,
   );
@@ -17,28 +18,35 @@ export default function Viewer() {
     return arr[randomIndex];
   };
 
+  const passTopic = (topic: PartialKeyword) => {
+    if (keywordArray.length <= 1) return;
+
+    const arr = keywordArray.filter(
+      (item) => item.keyword !== topic.keyword || item.name !== topic.name,
+    );
+    const randomTopic = pickRandomFrom(arr);
+    setTopic(() => randomTopic);
+  };
+
   useEffect(() => {
-    if (
-      primary === undefined ||
-      others === undefined ||
-      primary.length === 0 ||
-      others.length === 0
-    )
-      return;
+    if (primary === undefined || others === undefined) return;
 
-    console.log(primary, others);
-
-    const keywordArray = primary.length === 0 ? others : primary;
+    const kwrdArray = primary.length === 0 ? others : primary;
+    setKeywordArray(kwrdArray);
 
     // Pick randomly.
-    const randomTopic = pickRandomFrom(keywordArray);
+    const randomTopic = pickRandomFrom(kwrdArray);
     setTopic(() => randomTopic);
   }, [primary, others]);
 
   return (
     <>
       <ViewerWrapper className="viewer">
-        <Card title={topic?.keyword ?? ''} author={topic?.name ?? ''} />
+        <Card
+          title={topic?.keyword ?? ''}
+          author={topic?.name ?? ''}
+          onPass={passTopic}
+        />
       </ViewerWrapper>
     </>
   );

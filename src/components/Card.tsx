@@ -1,13 +1,19 @@
 import { PartialKeyword } from 'Keywords';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { removePrimaryWith } from '../stores/actions';
+import { removeOthersWith, removePrimaryWith } from '../stores/actions';
+import { RootState } from '../stores/root-reducer';
+import { AppState } from '../stores/state';
 
 export type Card = {
   title: string;
   author: string;
+  onPass: (topic: PartialKeyword) => void;
 };
-export const Card = ({ title, author }: Card) => {
+export const Card = ({ title, author, onPass }: Card) => {
+  const { primary } = useSelector<RootState, AppState>(
+    (state) => state.keyworder,
+  );
   const dispatch = useDispatch();
 
   const red = '#561f1f';
@@ -20,12 +26,15 @@ export const Card = ({ title, author }: Card) => {
 
   const onClickPass = () => {
     if (topic.keyword === '' || topic.name === '') return;
-    return;
+
+    onPass(topic);
   };
   const onClickDone = () => {
     if (topic.keyword === '' || topic.name === '') return;
 
-    return dispatch(removePrimaryWith(topic));
+    return primary.length === 0
+      ? dispatch(removeOthersWith(topic))
+      : dispatch(removePrimaryWith(topic));
   };
   return (
     <CardWrapper>

@@ -1,5 +1,6 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { PAGE_ID, NOTION_API_KEY } from './env';
+import { WholeKeywords } from 'Keywords';
 
 type BlockProperties = Record<
   | '키워드1(시작 전 발표)'
@@ -16,15 +17,6 @@ type BlockProperties = Record<
     }[];
   }
 >;
-
-export type KeywordsPartialType = {
-  keyword: string;
-  name: string;
-};
-export type KeywordsType = {
-  primary: KeywordsPartialType[];
-  others: KeywordsPartialType[];
-};
 
 export const fetchKeywords = async () => {
   const queryFilter = {
@@ -60,7 +52,7 @@ export const fetchKeywords = async () => {
       ];
     })
     .reduce(
-      (prev: KeywordsType, curr: (string | undefined)[]) => {
+      (prev: WholeKeywords, curr: (string | undefined)[]) => {
         const { primary, others } = prev;
 
         const [name, primaryKeyword, ...rest] = curr;

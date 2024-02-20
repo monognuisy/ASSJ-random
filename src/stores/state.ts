@@ -1,6 +1,6 @@
-import { KeywordsType } from '../utils/fetch-notion';
+import { PartialKeyword } from 'Keywords';
 
 export type AppState = {
-  primary: KeywordsType['primary'];
-  others: KeywordsType['others'];
+  primary: PartialKeyword[];
+  others: PartialKeyword[];
 };

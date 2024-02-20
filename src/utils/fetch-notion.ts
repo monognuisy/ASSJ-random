@@ -11,19 +11,20 @@ type BlockProperties = Record<
     rich_text?: {
       plain_text?: string;
     }[];
-    title?: {
+    title: {
       plain_text?: string;
     }[];
   }
 >;
 
-export type KeywordsType = Record<
-  'key_1' | 'key_2' | 'key_3' | 'key_4',
-  {
-    keyword: string;
-    name: string | undefined;
-  }[]
->;
+export type KeywordsPartialType = {
+  keyword: string;
+  name: string;
+};
+export type KeywordsType = {
+  primary: KeywordsPartialType[];
+  others: KeywordsPartialType[];
+};
 
 export const fetchKeywords = async () => {
   const queryFilter = {
@@ -47,38 +48,42 @@ export const fetchKeywords = async () => {
 
   const results = response.results as PageObjectResponse[];
 
-  const tempInit: KeywordsType = {
-    key_1: [],
-    key_2: [],
-    key_3: [],
-    key_4: [],
-  };
-
   const keywords = results
     .map((item) => {
       const properties = item.properties as unknown as BlockProperties;
       return [
+        properties['이름'].title[0].plain_text as string,
         properties['키워드1(시작 전 발표)'].rich_text?.[0]?.plain_text,
         properties['키워드2'].rich_text?.[0]?.plain_text,
         properties['키워드3'].rich_text?.[0]?.plain_text,
         properties['키워드4(더 만들어도 자유)'].rich_text?.[0]?.plain_text,
-        properties['이름'].title?.[0].plain_text,
       ];
     })
-    .reduce((prev: KeywordsType, curr: (string | undefined)[]) => {
-      const [first, second, third, fourth, name] = curr;
-      const { key_1, key_2, key_3, key_4 } = prev;
-      return {
-        key_1:
-          first === undefined ? key_1 : [...key_1, { keyword: first, name }],
-        key_2:
-          second === undefined ? key_2 : [...key_2, { keyword: second, name }],
-        key_3:
-          third === undefined ? key_3 : [...key_3, { keyword: third, name }],
-        key_4:
-          fourth === undefined ? key_4 : [...key_4, { keyword: fourth, name }],
-      };
-    }, tempInit);
+    .reduce(
+      (prev: KeywordsType, curr: (string | undefined)[]) => {
+        const { primary, others } = prev;
+
+        const [name, primaryKeyword, ...rest] = curr;
+        const otherKeywords = rest
+          .filter((item) => item !== undefined)
+          .map((item) => ({
+            keyword: item as string,
+            name: name as string,
+          }));
+
+        return {
+          primary:
+            primaryKeyword === undefined
+              ? primary
+              : [...primary, { keyword: primaryKeyword, name: name as string }],
+          others: [...others, ...otherKeywords],
+        };
+      },
+      {
+        primary: [],
+        others: [],
+      },
+    );
 
   return keywords;
 };

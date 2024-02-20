@@ -5,8 +5,8 @@ export type Card = {
   author: string;
 };
 export const Card = ({ title, author }: Card) => {
-  const red = '#ff6e6e';
-  const green = '#64eb5f';
+  const red = '#561f1f';
+  const green = '#216a35';
   return (
     <CardWrapper>
       <TitleCard>
@@ -17,8 +17,8 @@ export const Card = ({ title, author }: Card) => {
         <h2>{author}</h2>
       </AuthorCard>
       <ButtonWrapper>
-        <Button bgcolor={red}>Pass</Button>
-        <Button bgcolor={green}>Done</Button>
+        <Button bgcolor={red}>PASS ❌</Button>
+        <Button bgcolor={green}>DONE ✅</Button>
       </ButtonWrapper>
     </CardWrapper>
   );
@@ -52,7 +52,7 @@ const TitleCard = styled.div`
   padding: 1rem;
 
   & > h1 {
-    font-size: 6rem;
+    font-size: 500%;
     margin: 0;
   }
 `;
@@ -62,7 +62,7 @@ const AuthorCard = styled.div`
 
   & > h2 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 200%;
   }
 `;
 
@@ -82,9 +82,10 @@ const Button = styled.button<{ bgcolor: string }>`
   height: 40px;
 
   background-color: ${(props) => props.bgcolor || 'grey'};
-  color: #202020;
+  color: white;
 
-  font-size: 1rem;
+  font-size: 150%;
+  font-weight: bold;
 
   border-style: none;
 `;

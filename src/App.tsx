@@ -3,15 +3,20 @@ import Fetcher from './components/Fetcher';
 import Keywords from './components/Keywords';
 import Viewer from './components/Viewer';
 
+import { Provider } from 'react-redux';
+import { useStore } from './hooks/useStore';
+
 function App() {
+  const store = useStore();
+
   return (
-    <>
+    <Provider store={store}>
       <MainWrapper>
         <Viewer></Viewer>
         <Keywords></Keywords>
         <Fetcher></Fetcher>
       </MainWrapper>
-    </>
+    </Provider>
   );
 }
 

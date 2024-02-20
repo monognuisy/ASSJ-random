@@ -1,14 +1,28 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { fetchKeywords, KeywordsType } from '../utils/fetch-notion';
+import {
+  fetchKeywords,
+  KeywordsPartialType,
+  KeywordsType,
+} from '../utils/fetch-notion';
+import { useDispatch } from 'react-redux';
+import { setOthers, setPrimary } from '../stores/actions';
 
 export default function Keywords() {
+  const dispatch = useDispatch();
+  const onSetPrimary = (diff: KeywordsPartialType[]) =>
+    dispatch(setPrimary(diff));
+  const onSetOthers = (diff: KeywordsPartialType[]) =>
+    dispatch(setOthers(diff));
+
   const [keywords, setKeywords] = useState<KeywordsType>();
 
   const doFetchAndSet = async () => {
     const kwrds = await fetchKeywords();
     setKeywords(() => kwrds);
+    onSetPrimary(kwrds.primary);
+    onSetOthers(kwrds.others);
   };
 
   useEffect(() => {
@@ -21,7 +35,7 @@ export default function Keywords() {
         <FirstTime>
           <h1>첫번째 키워드들</h1>
           <div>
-            {keywords?.key_1.map(({ keyword }, i) => {
+            {keywords?.primary.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>
@@ -29,13 +43,7 @@ export default function Keywords() {
         <MainTime>
           <h1>메인 키워드들</h1>
           <div>
-            {keywords?.key_2.map(({ keyword }, i) => {
-              return <KeywordBox key={i}>{keyword}</KeywordBox>;
-            })}
-            {keywords?.key_3.map(({ keyword }, i) => {
-              return <KeywordBox key={i}>{keyword}</KeywordBox>;
-            })}
-            {keywords?.key_4.map(({ keyword }, i) => {
+            {keywords?.others.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>

@@ -112,7 +112,7 @@ const Button = styled.button<{ bgcolor: string }>`
   display: block;
   border-radius: 10px;
   width: 100%;
-  height: 40px;
+  min-height: 40px;
 
   background-color: ${(props) => props.bgcolor || 'grey'};
   color: white;
@@ -121,4 +121,5 @@ const Button = styled.button<{ bgcolor: string }>`
   font-weight: bold;
 
   border-style: none;
+  padding: 0.5rem;
 `;

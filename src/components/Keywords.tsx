@@ -45,7 +45,9 @@ export default function Keywords() {
             })}
           </div>
         </MainTime>
-        <FetchButtonWrapper></FetchButtonWrapper>
+        <FetchButtonWrapper>
+          <ResetButton onClick={doFetchAndSet}>RESET ⚠️</ResetButton>
+        </FetchButtonWrapper>
       </KeywordsWrapper>
     </>
   );
@@ -55,7 +57,7 @@ const KeywordsWrapper = styled.section`
   width: calc(100% - 2rem);
   display: grid;
 
-  grid-template-rows: repeat(3, auto);
+  grid-template-rows: 1fr 2fr auto;
   padding: 1rem;
 
   background-color: #111111;
@@ -67,6 +69,20 @@ const KeywordsWrapper = styled.section`
 const FirstTime = styled.div``;
 const MainTime = styled.div``;
 const FetchButtonWrapper = styled.div``;
+const ResetButton = styled.button`
+  display: block;
+  margin: 0 auto;
+
+  width: 60%;
+  font-size: 1.5rem;
+  font-weight: bold;
+  background-color: #ffec1c;
+  color: black;
+
+  border-radius: 10px;
+  border-style: none;
+  padding: 0.5rem;
+`;
 const KeywordBox = styled.div`
   padding: 1rem;
   margin: 0.5rem;

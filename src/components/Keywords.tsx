@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { fetchKeywords } from '../utils/fetch-notion';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setOthers, setPrimary } from '../stores/actions';
-import { PartialKeyword, WholeKeywords } from 'Keywords';
+import { PartialKeyword } from 'Keywords';
+import { RootState } from '../stores/root-reducer';
+import { AppState } from '../stores/state';
 
 export default function Keywords() {
   const dispatch = useDispatch();
+  const { primary, others } = useSelector<RootState, AppState>(
+    (state) => state.keyworder,
+  );
   const onSetPrimary = (diff: PartialKeyword[]) => dispatch(setPrimary(diff));
   const onSetOthers = (diff: PartialKeyword[]) => dispatch(setOthers(diff));
 
-  const [keywords, setKeywords] = useState<WholeKeywords>();
-
   const doFetchAndSet = async () => {
     const kwrds = await fetchKeywords();
-    setKeywords(() => kwrds);
     onSetPrimary(kwrds.primary);
     onSetOthers(kwrds.others);
   };
@@ -30,7 +32,7 @@ export default function Keywords() {
         <FirstTime>
           <h1>첫번째 키워드들</h1>
           <div>
-            {keywords?.primary.map(({ keyword }, i) => {
+            {primary.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>
@@ -38,7 +40,7 @@ export default function Keywords() {
         <MainTime>
           <h1>메인 키워드들</h1>
           <div>
-            {keywords?.others.map(({ keyword }, i) => {
+            {others.map(({ keyword }, i) => {
               return <KeywordBox key={i}>{keyword}</KeywordBox>;
             })}
           </div>

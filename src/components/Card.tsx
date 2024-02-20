@@ -1,12 +1,32 @@
+import { PartialKeyword } from 'Keywords';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { removePrimaryWith } from '../stores/actions';
 
 export type Card = {
   title: string;
   author: string;
 };
 export const Card = ({ title, author }: Card) => {
+  const dispatch = useDispatch();
+
   const red = '#561f1f';
   const green = '#216a35';
+
+  const topic: PartialKeyword = {
+    keyword: title,
+    name: author,
+  };
+
+  const onClickPass = () => {
+    if (topic.keyword === '' || topic.name === '') return;
+    return;
+  };
+  const onClickDone = () => {
+    if (topic.keyword === '' || topic.name === '') return;
+
+    return dispatch(removePrimaryWith(topic));
+  };
   return (
     <CardWrapper>
       <TitleCard>
@@ -17,8 +37,12 @@ export const Card = ({ title, author }: Card) => {
         <h2>{author}</h2>
       </AuthorCard>
       <ButtonWrapper>
-        <Button bgcolor={red}>PASS ❌</Button>
-        <Button bgcolor={green}>DONE ✅</Button>
+        <Button bgcolor={red} onClick={onClickPass}>
+          PASS ❌
+        </Button>
+        <Button bgcolor={green} onClick={onClickDone}>
+          DONE ✅
+        </Button>
       </ButtonWrapper>
     </CardWrapper>
   );

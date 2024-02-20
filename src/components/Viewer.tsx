@@ -4,16 +4,36 @@ import { useSelector } from 'react-redux';
 import { PartialKeyword } from 'Keywords';
 import { useEffect, useState } from 'react';
 import { RootState } from '../stores/root-reducer';
+import { AppState } from '../stores/state';
 
 export default function Viewer() {
   const [topic, setTopic] = useState<PartialKeyword>();
-  const primary = useSelector<RootState, PartialKeyword[]>(
-    (state) => state.keyworder.primary,
+  const { primary, others } = useSelector<RootState, AppState>(
+    (state) => state.keyworder,
   );
 
+  const pickRandomFrom = (arr: PartialKeyword[]) => {
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  };
+
   useEffect(() => {
-    setTopic(() => primary?.[0]);
-  }, [primary]);
+    if (
+      primary === undefined ||
+      others === undefined ||
+      primary.length === 0 ||
+      others.length === 0
+    )
+      return;
+
+    console.log(primary, others);
+
+    const keywordArray = primary.length === 0 ? others : primary;
+
+    // Pick randomly.
+    const randomTopic = pickRandomFrom(keywordArray);
+    setTopic(() => randomTopic);
+  }, [primary, others]);
 
   return (
     <>

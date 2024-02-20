@@ -1,14 +1,28 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { fetchKeywords, KeywordsType } from '../utils/fetch-notion';
+import {
+  fetchKeywords,
+  KeywordsPartialType,
+  KeywordsType,
+} from '../utils/fetch-notion';
+import { useDispatch } from 'react-redux';
+import { setOthers, setPrimary } from '../stores/actions';
 
 export default function Keywords() {
+  const dispatch = useDispatch();
+  const onSetPrimary = (diff: KeywordsPartialType[]) =>
+    dispatch(setPrimary(diff));
+  const onSetOthers = (diff: KeywordsPartialType[]) =>
+    dispatch(setOthers(diff));
+
   const [keywords, setKeywords] = useState<KeywordsType>();
 
   const doFetchAndSet = async () => {
     const kwrds = await fetchKeywords();
     setKeywords(() => kwrds);
+    onSetPrimary(kwrds.primary);
+    onSetOthers(kwrds.others);
   };
 
   useEffect(() => {

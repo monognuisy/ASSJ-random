@@ -1,6 +1,6 @@
 import type { AppState } from '../state';
 import type { KeywordAction } from '../actions';
-import { KeywordsType } from '../../utils/fetch-notion';
+// import { KeywordsType } from '../../utils/fetch-notion';
 
 const initialAppState: AppState = {
   primary: [],

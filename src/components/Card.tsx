@@ -4,13 +4,15 @@ import styled from 'styled-components';
 import { removeOthersWith, removePrimaryWith } from '../stores/actions';
 import { RootState } from '../stores/root-reducer';
 import { AppState } from '../stores/state';
+import { Description } from './Description';
 
 export type Card = {
   title: string;
   author: string;
+  relatedTopics: string[];
   onPass: (topic: PartialKeyword) => void;
 };
-export const Card = ({ title, author, onPass }: Card) => {
+export const Card = ({ title, author, relatedTopics, onPass }: Card) => {
   const { primary } = useSelector<RootState, AppState>(
     (state) => state.keyworder,
   );
@@ -22,6 +24,7 @@ export const Card = ({ title, author, onPass }: Card) => {
   const topic: PartialKeyword = {
     keyword: title,
     name: author,
+    hashtags: relatedTopics
   };
 
   const onClickPass = () => {
@@ -36,6 +39,7 @@ export const Card = ({ title, author, onPass }: Card) => {
       ? dispatch(removeOthersWith(topic))
       : dispatch(removePrimaryWith(topic));
   };
+
   return (
     <CardWrapper>
       <TitleCard>
@@ -44,6 +48,7 @@ export const Card = ({ title, author, onPass }: Card) => {
       </TitleCard>
       <AuthorCard>
         <h2>{author}</h2>
+        <Description relatedTopics={relatedTopics}></Description>
       </AuthorCard>
       <ButtonWrapper>
         <Button bgcolor={red} onClick={onClickPass}>

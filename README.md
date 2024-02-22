@@ -79,3 +79,19 @@ feat/fetch-notion
 ```
 
 Then, send PR to this develop branch.
+
+## To users
+
+### Hashtags
+
+To add some hashtags for a topic, please write the keyword as below:
+
+```Tex
+<topic>| #<hashtag 1> #<hashtag2> #<hashtag3>...
+```
+
+For example:
+
+```Tex
+Colors| #red #green #how_to_blend
+```

@@ -45,6 +45,7 @@ export default function Viewer() {
         <Card
           title={topic?.keyword ?? ''}
           author={topic?.name ?? ''}
+          relatedTopics={topic?.hashtags ?? []}
           onPass={passTopic}
         />
       </ViewerWrapper>

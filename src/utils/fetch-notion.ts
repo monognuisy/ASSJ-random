@@ -55,19 +55,25 @@ export const fetchKeywords = async () => {
       (prev: WholeKeywords, curr: (string | undefined)[]) => {
         const { primary, others } = prev;
 
-        const [name, primaryKeyword, ...rest] = curr;
+        const [name, rawPrimaryKeyword, ...rest] = curr;
         const otherKeywords = rest
           .filter((item) => item !== undefined)
-          .map((item) => ({
-            keyword: item as string,
-            name: name as string,
-          }));
-
+          .map((item) => {
+            const keyAndHash = getHashtagsFromKeyword(item as string);
+            return {
+              keyword: keyAndHash.keyword,
+              hashtags: keyAndHash.hashtags,
+              name: name as string,
+            }
+          });
+        const primaryKeyAndHash = getHashtagsFromKeyword(rawPrimaryKeyword as string);
+        const primaryKeyword = primaryKeyAndHash.keyword;
+        const primaryHashtag = primaryKeyAndHash.hashtags;
         return {
           primary:
             primaryKeyword === undefined
               ? primary
-              : [...primary, { keyword: primaryKeyword, name: name as string }],
+              : [...primary, { keyword: primaryKeyword, hashtags: primaryHashtag, name: name as string }],
           others: [...others, ...otherKeywords],
         };
       },
@@ -78,4 +84,22 @@ export const fetchKeywords = async () => {
     );
 
   return keywords;
+};
+
+const getHashtagsFromKeyword = (rawKeyword: (string | undefined)) => {
+  /*
+    Preprocessing to find hashtags
+    Finds hashtags from a given raw text.
+    Assume the following syntax:
+    <Keyword>| #<hashtag1> #<hashtag2> ...
+
+    rawKeyword: raw text given; if this is undefined the funciton assumes that there is no keyword.
+
+    return: keyword and hastags pair. hashtags are undefined or an array of strings.
+  */
+  if (rawKeyword == undefined) return {keyword: undefined, hashtags: undefined};
+  if (!rawKeyword.includes("|")) return {keyword: rawKeyword, hashtags: undefined};
+  const [keyword, rawHashtags] = rawKeyword.split("|");
+  const hashtags = rawHashtags.split("#").map((item) => (item.trim())).filter((item) => (item.length > 0));
+  return {keyword: keyword, hashtags: hashtags};
 };

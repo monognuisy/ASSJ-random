@@ -4,12 +4,11 @@ import styled from 'styled-components';
 import { removeOthersWith, removePrimaryWith } from '../stores/actions';
 import { RootState } from '../stores/root-reducer';
 import { AppState } from '../stores/state';
-import React, { ReactElement } from 'react';
 
 export type Card = {
   title: string;
   author: string;
-  related_topics: Array<string>;
+  related_topics: string[];
   onPass: (topic: PartialKeyword) => void;
 };
 export const Card = ({ title, author, related_topics, onPass }: Card) => {
@@ -27,7 +26,12 @@ export const Card = ({ title, author, related_topics, onPass }: Card) => {
     hashtags: related_topics
   };
 
-  const fetchRelatedTopics = (related_topics: Array<string>) => {
+  const fetchRelatedTopics = (related_topics: string[]) => {
+      /*
+        related_topics: The list of hashtags - only the words are provided and is already trimmed
+
+        returns: JSX expression for hashtags
+      */
       const hashtags = related_topics.map(
         related_topic => (
           `# ${related_topic}　　`

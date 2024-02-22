@@ -87,6 +87,16 @@ export const fetchKeywords = async () => {
 };
 
 const getHashtagsFromKeyword = (rawKeyword: (string | undefined)) => {
+  /*
+    Preprocessing to find hashtags
+    Finds hashtags from a given raw text.
+    Assume the following syntax:
+    <Keyword>| #<hashtag1> #<hashtag2> ...
+
+    rawKeyword: raw text given; if this is undefined the funciton assumes that there is no keyword.
+
+    return: keyword and hastags pair. hashtags are undefined or an array of strings.
+  */
   if (rawKeyword == undefined) return {keyword: undefined, hashtags: undefined};
   if (!rawKeyword.includes("|")) return {keyword: rawKeyword, hashtags: undefined};
   const [keyword, rawHashtags] = rawKeyword.split("|");

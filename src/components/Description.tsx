@@ -30,6 +30,7 @@ const DescriptionWrapper = styled.div`
     margin: 0;
 `
 
+// This styled-component exists because of further styling.
 const Hashtags = styled.h4`
     margin: 0;
 `

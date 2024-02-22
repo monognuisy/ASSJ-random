@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { fetchKeywords } from '../utils/fetch-notion';
@@ -13,18 +13,20 @@ export default function Keywords() {
   const { primary, others } = useSelector<RootState, AppState>(
     (state) => state.keyworder,
   );
-  const onSetPrimary = (diff: PartialKeyword[]) => dispatch(setPrimary(diff));
-  const onSetOthers = (diff: PartialKeyword[]) => dispatch(setOthers(diff));
 
-  const doFetchAndSet = async () => {
+  const doFetchAndSet = useCallback(async () => {
+    const onSetPrimary = (diff: PartialKeyword[]) => dispatch(setPrimary(diff));
+    const onSetOthers = (diff: PartialKeyword[]) => dispatch(setOthers(diff));
+
     const kwrds = await fetchKeywords();
+
     onSetPrimary(kwrds.primary);
     onSetOthers(kwrds.others);
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     doFetchAndSet();
-  }, []);
+  }, [doFetchAndSet]);
 
   return (
     <>

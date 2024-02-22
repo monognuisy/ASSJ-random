@@ -4,13 +4,15 @@ import styled from 'styled-components';
 import { removeOthersWith, removePrimaryWith } from '../stores/actions';
 import { RootState } from '../stores/root-reducer';
 import { AppState } from '../stores/state';
+import React, { ReactElement } from 'react';
 
 export type Card = {
   title: string;
   author: string;
+  related_topics: Array<string>;
   onPass: (topic: PartialKeyword) => void;
 };
-export const Card = ({ title, author, onPass }: Card) => {
+export const Card = ({ title, author, related_topics, onPass }: Card) => {
   const { primary } = useSelector<RootState, AppState>(
     (state) => state.keyworder,
   );
@@ -22,7 +24,22 @@ export const Card = ({ title, author, onPass }: Card) => {
   const topic: PartialKeyword = {
     keyword: title,
     name: author,
+    hashtags: related_topics
   };
+
+  const fetchRelatedTopics = (related_topics: Array<string>) => {
+      const hashtags = related_topics.map(
+        related_topic => (
+          `# ${related_topic}　　`
+        )
+      );
+      return (
+        <div id="hash">
+          <h4>{hashtags}</h4>
+        </div>
+      )
+  };
+  const hashtags = fetchRelatedTopics(related_topics);
 
   const onClickPass = () => {
     if (topic.keyword === '' || topic.name === '') return;
@@ -36,6 +53,7 @@ export const Card = ({ title, author, onPass }: Card) => {
       ? dispatch(removeOthersWith(topic))
       : dispatch(removePrimaryWith(topic));
   };
+
   return (
     <CardWrapper>
       <TitleCard>
@@ -44,6 +62,7 @@ export const Card = ({ title, author, onPass }: Card) => {
       </TitleCard>
       <AuthorCard>
         <h2>{author}</h2>
+        {hashtags}
       </AuthorCard>
       <ButtonWrapper>
         <Button bgcolor={red} onClick={onClickPass}>

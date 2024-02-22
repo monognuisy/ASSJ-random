@@ -55,19 +55,25 @@ export const fetchKeywords = async () => {
       (prev: WholeKeywords, curr: (string | undefined)[]) => {
         const { primary, others } = prev;
 
-        const [name, primaryKeyword, ...rest] = curr;
+        const [name, rawPrimaryKeyword, ...rest] = curr;
         const otherKeywords = rest
           .filter((item) => item !== undefined)
-          .map((item) => ({
-            keyword: item as string,
-            name: name as string,
-          }));
-
+          .map((item) => {
+            const key_and_hash = getHashtagsFromKeyword(item as string);
+            return {
+              keyword: key_and_hash.keyword,
+              hashtags: key_and_hash.hashtags,
+              name: name as string,
+            }
+          });
+        const primary_key_and_hash = getHashtagsFromKeyword(rawPrimaryKeyword as string);
+        const primaryKeyword = primary_key_and_hash.keyword;
+        const primaryHashtag = primary_key_and_hash.hashtags;
         return {
           primary:
             primaryKeyword === undefined
               ? primary
-              : [...primary, { keyword: primaryKeyword, name: name as string }],
+              : [...primary, { keyword: primaryKeyword, hashtags: primaryHashtag, name: name as string }],
           others: [...others, ...otherKeywords],
         };
       },
@@ -78,4 +84,12 @@ export const fetchKeywords = async () => {
     );
 
   return keywords;
+};
+
+const getHashtagsFromKeyword = (rawKeyword: (string | undefined)) => {
+  if (rawKeyword == undefined) return {keyword: undefined, hashtags: undefined};
+  if (!rawKeyword.includes("|")) return {keyword: rawKeyword, hashtags: undefined};
+  const [keyword, rawHashtags] = rawKeyword.split("|");
+  const hashtags = rawHashtags.split("#").map((item) => (item.trim())).filter((item) => (item.length > 0));
+  return {keyword: keyword, hashtags: hashtags};
 };

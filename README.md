@@ -20,7 +20,7 @@ export const NOTION_API_KEY =  '<Our notion api key>';
 ```
 
 You can check page id (32 characters) from the url of the notion page. Here's the way to check the page id from url.
-![Example](image.png)
+![Example](./public/notion-page-id.png)
 
 You can make your own api key (<https://www.notion.so/my-integrations/>) or, can contact me if you're not the owner of the page.
 
@@ -40,4 +40,42 @@ pnpm run dev
 
 ## To contributors
 
+### ❤️
+
 Feel free to contribute this project!
+
+### Commit conventions
+
+Write commit header as following format:
+
+```text
+<type>: <description>
+```
+
+Here are some examples of commit headers:
+
+```text
+feat:  make hashtags
+fix: info updating bug
+chore: add vscode to gitignore
+docs: update README.md
+refactor: cache data for optimization
+style: add semicolon
+```
+
+You can use your own `<type>` if you want.
+
+### Branch workflow
+
+Currently, following git-flow branching strategy.
+
+Therefore, the contributors should make branch from develop like:
+
+```bash
+<type>/<description>
+
+# for example
+feat/fetch-notion
+```
+
+Then, send PR to this develop branch.

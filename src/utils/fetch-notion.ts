@@ -59,16 +59,16 @@ export const fetchKeywords = async () => {
         const otherKeywords = rest
           .filter((item) => item !== undefined)
           .map((item) => {
-            const key_and_hash = getHashtagsFromKeyword(item as string);
+            const keyAndHash = getHashtagsFromKeyword(item as string);
             return {
-              keyword: key_and_hash.keyword,
-              hashtags: key_and_hash.hashtags,
+              keyword: keyAndHash.keyword,
+              hashtags: keyAndHash.hashtags,
               name: name as string,
             }
           });
-        const primary_key_and_hash = getHashtagsFromKeyword(rawPrimaryKeyword as string);
-        const primaryKeyword = primary_key_and_hash.keyword;
-        const primaryHashtag = primary_key_and_hash.hashtags;
+        const primaryKeyAndHash = getHashtagsFromKeyword(rawPrimaryKeyword as string);
+        const primaryKeyword = primaryKeyAndHash.keyword;
+        const primaryHashtag = primaryKeyAndHash.hashtags;
         return {
           primary:
             primaryKeyword === undefined

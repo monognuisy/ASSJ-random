@@ -102,14 +102,3 @@ const formatToConferenceTopic = (root: PageObjectResponse[]): MeetingTopic[] => 
 
     return topics;
 }
-
-/* 
- 
-*/
-
-export const testing = async (id: string) => {
-    const root = await retrieveDatabase(id);
-    retrieveDatabase(Env.TEST_DATABASE2_ID);
-    if (root == undefined) throw new EmptyDatabaseError("요청한 데이터베이스가 비어 있습니다.");
-    return root;
-}

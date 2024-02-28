@@ -23,6 +23,7 @@ export const fetchKeywords = async () => {
     filter: {
       property: '이름',
       title: {
+        // eslint-disable-next-line camelcase
         is_not_empty: true,
       },
     },
@@ -64,7 +65,7 @@ export const fetchKeywords = async () => {
               keyword: keyAndHash.keyword,
               hashtags: keyAndHash.hashtags,
               name: name as string,
-            }
+            };
           });
         const primaryKeyAndHash = getHashtagsFromKeyword(rawPrimaryKeyword as string);
         const primaryKeyword = primaryKeyAndHash.keyword;
@@ -98,8 +99,8 @@ const getHashtagsFromKeyword = (rawKeyword: (string | undefined)) => {
     return: keyword and hastags pair. hashtags are undefined or an array of strings.
   */
   if (rawKeyword == undefined) return {keyword: undefined, hashtags: undefined};
-  if (!rawKeyword.includes("|")) return {keyword: rawKeyword, hashtags: undefined};
-  const [keyword, rawHashtags] = rawKeyword.split("|");
-  const hashtags = rawHashtags.split("#").map((item) => (item.trim())).filter((item) => (item.length > 0));
+  if (!rawKeyword.includes('|')) return {keyword: rawKeyword, hashtags: undefined};
+  const [keyword, rawHashtags] = rawKeyword.split('|');
+  const hashtags = rawHashtags.split('#').map((item) => (item.trim())).filter((item) => (item.length > 0));
   return {keyword: keyword, hashtags: hashtags};
 };

@@ -15,7 +15,7 @@ type MeetingTopic = Record<
 
     :id: 데이터베이스의 아이디
 */
-export const retrieveDatabase = async (id: string): Promise<LectureTopic[]|MeetingTopic[]> => {
+export const retrieveDatabase = async (id: string): Promise<LectureTopic[] | MeetingTopic[]> => {
     const queryFilter = {
         filter: {
             property: Env.NAME_COL,

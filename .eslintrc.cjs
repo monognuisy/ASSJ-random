@@ -14,5 +14,14 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    semi: ['error', 'always'],
+    quotes: ['error', 'single'],
+    indent: ['error', 2],
+    camelcase: [
+      'error',
+      {
+        properties: 'always',
+      },
+    ],
   },
-}
+};

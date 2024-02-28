@@ -2,7 +2,7 @@ import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import * as Env from '../env';
 
 
-export type DatabaseType = 'lecture' | 'meeting';
+export type TopicType = 'lecture' | 'meeting';
 
 
 export type LectureTopic = Record<
@@ -17,7 +17,7 @@ export type MeetingTopic = Record<
 
 export type Topic = {
     'id': string,
-    'type': DatabaseType,
+    'type': TopicType,
     'database': LectureTopic[] | MeetingTopic[]
 }
 

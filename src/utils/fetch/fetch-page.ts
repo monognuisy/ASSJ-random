@@ -1,13 +1,20 @@
 import { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import * as Env from '../env';
+import { Topic, retrieveTopic } from './fetch-topic';
+
+
+export type PageView = {
+    'id': string,
+    'page': PageObjectResponse[]
+}
 
 
 /*
     페이지를 가져옴.
 
-    :page_id: 가져올 페이지의 page_id
+    :pageId: 가져올 페이지의 pageId
 */
-const retrievePage = async (pageId: string): Promise<PageObjectResponse[]> => {
+export const retrievePage = async (pageId: string): Promise<PageObjectResponse[]> => {
   const response = await fetch(`api/v1/blocks/${pageId}/children`, {
     method: 'GET',
     headers: {
@@ -49,16 +56,21 @@ const findMeetingPageId = (root: PageObjectResponse[], title?: string): string[]
 
 
 /*
-    홈페이지 아래의 모임 페이지를 가져옴.
+    홈페이지 아래의 모임 페이지를 가져옴. 아이디도 기록함.
 
-    :root: 가져온 홈페이지
+    :ids: 획득한 pageId
     :title: 찾으려는 모임. 주어지지 않을 경우, 모든 모임을 가져옴.
+
+    :returns: PageView의 배열
+    형태)
+    [
+        {"id": string, "page": PageObjectResponse[]}, ...
+    ]
 */
-const findMeetingPage = async (root: PageObjectResponse[], title?: string): Promise<PageObjectResponse[][]> => {
-  const ids = findMeetingPageId(root, title);
+const findMeetingPageFromId = async (ids: string[]): Promise<PageView[]> => {
   const pages = await Promise.all(
     ids.map(
-      async childPageId => await retrievePage(childPageId)
+      async childPageId => ({'id': childPageId, 'page': await retrievePage(childPageId)} as PageView)
     )
   );
   return pages;
@@ -66,13 +78,71 @@ const findMeetingPage = async (root: PageObjectResponse[], title?: string): Prom
 
 
 /*
-    홈페이지를 불러오고, 그 홈페이지에 속한 페이지를 가져옴.
+    홈페이지를 불러오고, 그 홈페이지에 속한 페이지를
+    {id: Page} 형태로 가져옴.
+
+    :pageId: 가져올 페이지(홈페이지)의 page_id
+    :title: 찾으려는 모임. 주어지지 않을 경우, 모든 모임을 가져옴.
+    :returns: PageFile의 배열
+    형태)
+    [
+        {"id": string, "page": PageObjectResponse[]}, ...
+    ]
+*/
+export const retrieveMeetingPage = async (pageId: string, title?: string): Promise<PageView[]> => {
+  const root = await retrievePage(pageId);
+  const meetingPageId = findMeetingPageId(root, title);
+  const meetingPage = await findMeetingPageFromId(meetingPageId);
+  return meetingPage;
+};
+
+
+/*
+    홈페이지를 불러오고, 그 홈페이지에 속한 페이지를
+    {id: Page} 형태로 가져옴. 딱 1개만
+
+    :pageId: 가져올 페이지(홈페이지)의 page_id
+    :title: 찾으려는 모임. 주어지지 않을 경우, 모든 모임을 가져옴.
+    :returns: PageView
+    형태)
+    {"id": string, "page": PageObjectResponse[]}, ...
+*/
+export const retrieveMeetingPageSingular = async (pageId: string, title?: string): Promise<PageView> => {
+  const root = await retrievePage(pageId);
+  const meetingPageId = findMeetingPageId(root, title);
+  const meetingPage = await findMeetingPageFromId(meetingPageId);
+  return meetingPage[0];
+};
+
+
+/*
+    홈페이지 아래의 데이터베이스 아이디를 가져옴. (이 함수는 페이지를 가져오는 함수와 달리 1개만 가져옴)
+
+    :root: 가져온 홈페이지
+    :title: 찾으려는 데이터베이스. 필수!
+*/
+const findDatabaseId = (root: PageObjectResponse[], title: string): string => {
+  // 필터
+  const validityCheck = (item: PageObjectResponse, checkTitle: string) => (
+    'child_database' in item && typeof item.child_database == 'object' && item.child_database // 확실한 자식 데이터베이스인지 검사
+        && 'title' in item.child_database && typeof item.child_database.title == 'string' // 자식 데이터베이스의 제목이 있는지 검사
+        && item.child_database.title.includes(checkTitle) // 그게 찾는 모임인지 검사
+  );
+
+  const childPageId = root.find(block => validityCheck(block, title))!.id;
+  return childPageId;
+};
+
+
+/*
+    홈페이지를 불러오고, 그 홈페이지에 속한 주제/논제 데이터베이스를 가져옴. (이 함수는 페이지를 가져오는 함수와 달리 1개만 가져옴.)
 
     :page_id: 가져올 페이지(홈페이지)의 page_id
-    :title: 찾으려는 모임. 주어지지 않을 경우, 모든 모임을 가져옴.
+    :title: 찾으려는 데이터베이스. 필수!
 */
-export const retrieveMeetingPage = async (pageId: string, title?: string) => {
+export const retrieveTopicDirectly = async (pageId: string, title: string): Promise<Topic> => {
   const root = await retrievePage(pageId);
-  const meetingPage = await findMeetingPage(root, title);
-  return meetingPage;
+  const databaseId = findDatabaseId(root, title);
+  const topic = await retrieveTopic(databaseId);
+  return topic;
 };
